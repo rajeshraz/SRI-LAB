@@ -1,0 +1,150 @@
+/* Container styling */
+.min-h-screen {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #e3f2fd, #bbdefb);
+    color: #333;
+  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Changed from height to min-height */
+  }
+  
+  /* Heading styles */
+  h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #0d47a1;
+    margin-bottom: 10px;
+  }
+  
+  h2 {
+    font-size: 3rem;
+    font-weight: 900;
+    background: linear-gradient(to right, #1565c0, #42a5f5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+  }
+  
+  /* Button container styling */
+  .button-container {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Spacing between buttons */
+  }
+  
+  /* Button styles */
+  button {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid transparent;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  button:hover {
+    transform: scale(1.05);
+  }
+  
+  /* User button */
+  .user-button {
+    background-color: #ffffff;
+    color: #0d47a1;
+    border: 2px solid #bbdefb;
+  }
+  
+  .user-button:hover {
+    background-color: #e3f2fd;
+  }
+  
+  /* Admin button */
+  .admin-button {
+    background: linear-gradient(to right, #1976d2, #0d47a1);
+    color: #ffffff;
+  }
+  
+  .admin-button:hover {
+    background: linear-gradient(to right, #0d47a1, #1976d2);
+  }
+  
+  /* Error message styling */
+  .error-message {
+    margin-top: 16px;
+    color: #d32f2f;
+    background-color: #ffebee;
+    padding: 8px 16px;
+    border-radius: 50px;
+    border: 1px solid #e57373;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Responsive Styles */
+  
+  /* For devices with width of 768px and above (tablets and large devices) */
+  @media (max-width: 768px) {
+    .min-h-screen {
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 2rem;
+    }
+  
+    h2 {
+      font-size: 2.5rem;
+    }
+  
+    .button-container {
+      margin-top: 20px;
+    }
+  
+    button {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+    }
+  
+    .user-button, .admin-button {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* For devices with width of 480px and below (mobile devices) */
+  @media (max-width: 480px) {
+    .min-h-screen {
+      padding: 15px;
+    }
+  
+    h1 {
+      font-size: 1.8rem;
+    }
+  
+    h2 {
+      font-size: 2rem;
+    }
+  
+    .button-container {
+      margin-top: 15px;
+    }
+  
+    button {
+      padding: 8px 16px;
+      font-size: 0.8rem;
+    }
+  
+    .user-button, .admin-button {
+      font-size: 0.8rem;
+    }
+  
+    .error-message {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+  }
+  

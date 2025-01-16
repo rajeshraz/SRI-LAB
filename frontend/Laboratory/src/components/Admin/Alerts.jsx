@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './adminstylings/alerts.css';
+import { toast, ToastContainer } from 'react-toastify';  // Import ToastContainer
 
 function Alerts() {
   const [bookings, setBookings] = useState([]);
@@ -67,21 +68,20 @@ function Alerts() {
       setShowConfirmDialog(false);
     }
   };
-
   const handleUpload = async (id, file) => {
     if (!file) return;
-
+  
     try {
       setUploadingReport(id);
       const formData = new FormData();
       formData.append('report', file);
-
+  
       const response = await axios.post(
         `http://localhost:5000/api/bookings/${id}/upload`,
         formData,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
-
+  
       if (response.data && response.data.success) {
         setBookings((prevBookings) =>
           prevBookings.map((booking) =>
@@ -90,6 +90,11 @@ function Alerts() {
               : booking
           )
         );
+        // Display success toast after uploading the file
+        toast.success('Report uploaded successfully!', {
+          position: 'bottom-right',  // Direct string for position
+          autoClose: 3000,
+        });
       } else {
         throw new Error(response.data.message || 'Failed to upload report');
       }
@@ -99,6 +104,8 @@ function Alerts() {
       setUploadingReport(null);
     }
   };
+  
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -170,6 +177,9 @@ function Alerts() {
           ))}
         </ul>
       )}
+
+      {/* ToastContainer to render toasts */}
+      <ToastContainer />
     </div>
   );
 }

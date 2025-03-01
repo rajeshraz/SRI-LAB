@@ -113,7 +113,7 @@ function Alerts() {
   return (
     <div className="alerts-container">
       {/* Back arrow */}
-      <div className="back-arrow" onClick={() => navigate(-1)}>
+      <div className="back-arrow" onClick={() => navigate("/")}>
         ←
       </div>
 

@@ -13,7 +13,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [viewingReport, setViewingReport] = useState(false);
-  const [hidingBooking, setHidingBooking] = useState(null);
+  
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
@@ -144,7 +144,7 @@ const Home = () => {
   return (
     <div className="homecss">
       <div className="header">
-        <span className="back-arrow" onClick={() => navigate(-1)}>
+        <span className="back-arrow" onClick={() => navigate("/")}>
           ←
         </span>
         <h1 className="greeting-text">{greeting}</h1>

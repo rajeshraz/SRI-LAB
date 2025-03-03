@@ -38,7 +38,7 @@ const Home = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/bookings/user');
+      const response = await axios.get('https://sri-lab-backend.vercel.app/api/bookings/user');
       if (response.data.success) {
         setBookings(prevBookings => {
           const newBookings = response.data.data || [];
@@ -74,7 +74,7 @@ const Home = () => {
   const handleViewReport = async (id) => {
     try {
       setViewingReport(true);
-      const response = await axios.get(`http://localhost:5000/api/bookings/${id}/report`, {
+      const response = await axios.get(`https://sri-lab-backend.vercel.app/api/bookings/${id}/report`, {
         responseType: 'blob',
       });
 
@@ -105,7 +105,7 @@ const Home = () => {
 
   const handleDownloadReport = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/bookings/${id}/report`, {
+      const response = await axios.get(`https://sri-lab-backend.vercel.app/api/bookings/${id}/report`, {
         responseType: 'blob',
       });
 

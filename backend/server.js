@@ -17,7 +17,7 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Allowed origins
 const allowedOrigins = [
-  'https://sri-lab.vercel.app/'// Replace with your production domain
+  'https://sri-lab.vercel.app'// Replace with your production domain
 ];
 
 // CORS middleware

@@ -8,6 +8,8 @@ const { Server } = require("socket.io");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 dotenv.config();
+console.log("MONGO_URI:", process.env.MONGO_URI); // Debugging line
+
 connectDB();
 
 const app = express();

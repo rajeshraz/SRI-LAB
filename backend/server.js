@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-
 });
 
-module.exports = { io };
+// Fix: Export the server instead of an object
+module.exports = server;

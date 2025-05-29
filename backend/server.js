@@ -36,6 +36,11 @@ connectDB().then(() => {
 
   app.use(express.json());
 
+  // ✅ Root test route
+  app.get("/", (req, res) => {
+    res.send("Backend is running ✅");
+  });
+
   // ✅ Initialize Gemini AI only once
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
@@ -54,7 +59,7 @@ connectDB().then(() => {
       const model = genAI.getGenerativeModel({ model: "gemini-pro" });
       const result = await model.generateContent(message);
       const response = await result.response;
-      
+
       if (!response) {
         return res.status(500).json({ error: "Failed to generate response" });
       }

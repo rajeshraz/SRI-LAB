@@ -20,7 +20,7 @@ const BookingForm = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      await axios.post("http://localhost:5000/api/bookings/add", formData);
+      await axios.post("https://sri-lab-backend.vercel.app/api/bookings/add", formData);
       setStatus({
         type: 'success',
         message: 'Booking confirmed! Admin has been notified.'

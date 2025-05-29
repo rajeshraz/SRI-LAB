@@ -14,7 +14,7 @@ const LandingPage = () => {
     e.preventDefault();
     const { username, password } = adminCredentials;
 
-    if (username === "rajesh" && password === "rajesh") {
+    if (username === "srilab" && password === "srilab") {
       navigate("/admin/home");
     } else {
       setError("Invalid username or password.");

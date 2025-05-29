@@ -39,6 +39,7 @@ const Home = () => {
     try {
       setLoading(true);
       const response = await axios.get('https://sri-lab-backend.vercel.app/api/bookings/user');
+    
       if (response.data.success) {
         setBookings(prevBookings => {
           const newBookings = response.data.data || [];

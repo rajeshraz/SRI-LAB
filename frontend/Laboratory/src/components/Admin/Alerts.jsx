@@ -23,7 +23,7 @@ function Alerts() {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/bookings/all');
+      const response = await axios.get('https://sri-lab-backend.vercel.app/api/bookings/all');
       if (response.data.success) {
         setBookings(response.data.data || []);
         setError(null);
@@ -52,7 +52,7 @@ function Alerts() {
 
     try {
       setDeletingBooking(selectedBookingId);
-      const response = await axios.delete(`http://localhost:5000/api/bookings/${selectedBookingId}`);
+      const response = await axios.delete(`https://sri-lab-backend.vercel.app/api/bookings/${selectedBookingId}`);
       if (response.data && response.data.success) {
         setBookings((prevBookings) =>
           prevBookings.filter((booking) => booking._id !== selectedBookingId)
@@ -77,7 +77,7 @@ function Alerts() {
       formData.append('report', file);
   
       const response = await axios.post(
-        `http://localhost:5000/api/bookings/${id}/upload`,
+        `https://sri-lab-backend.vercel.app/api/bookings/${id}/upload`,
         formData,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );

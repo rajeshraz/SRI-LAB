@@ -23,7 +23,10 @@ function Alerts() {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://sri-lab-backend.vercel.app/api/bookings/all');
+      const response = await axios.get("https://sri-lab-backend.vercel.app/api/bookings/all", {
+  withCredentials: true, 
+});
+
       if (response.data.success) {
         setBookings(response.data.data || []);
         setError(null);

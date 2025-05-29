@@ -20,7 +20,7 @@ const allowedOrigins = ["https://sri-lab.vercel.app","http://localhost:5173"];
 
 // Use CORS for Express (REST APIs)
 app.use(cors({
-  origin: allowedOrigins[0], // explicitly allow sri-lab.vercel.app
+  origin: allowedOrigins, 
   credentials: true,         // allow cookies if needed
   methods: ["GET", "POST", "PUT", "DELETE"]
 }));

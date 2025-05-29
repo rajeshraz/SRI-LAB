@@ -19,7 +19,7 @@ const Status = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/bookings/all');
+      const response = await axios.get('https://sri-lab-backend.vercel.app/api/bookings/all');
       if (response.data.success) {
         const bookings = response.data.data;
         const total = bookings.length;

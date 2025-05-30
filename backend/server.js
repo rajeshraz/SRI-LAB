@@ -11,21 +11,27 @@ dotenv.config();
 console.log("🔍 Debug: MONGO_URI:", process.env.MONGO_URI);
 
 const app = express();
+const server = http.createServer(app);
 
-// Middleware to parse JSON bodies
-app.use(express.json());
+// Allowed frontend origin(s)
+const allowedOrigins = ["https://sri-lab.vercel.app", "http://localhost:5173"];
 
-// Allowed frontend origin
-const allowedOrigins = ["https://sri-lab.vercel.app","http://localhost:5173"];
-
-// Use CORS for Express (REST APIs)
+// CORS for REST API
 app.use(cors({
-  origin: allowedOrigins[0], // explicitly allow sri-lab.vercel.app
-  credentials: true,         // allow cookies if needed
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"]
 }));
 
-// Test route
+app.use(express.json()); // Parse JSON
+
+// Basic test route
 app.get("/", (req, res) => {
   res.send("✅ Backend is running!");
 });
@@ -33,7 +39,7 @@ app.get("/", (req, res) => {
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Routes
+// API Routes
 app.use("/api/bookings", bookingsRouter);
 
 // Chat route
@@ -55,24 +61,28 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Create HTTP server and bind to app
-const server = http.createServer(app);
-
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins[0],
-    methods: ["GET", "POST"]
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS (Socket.IO)"));
+      }
+    },
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
-// Socket.IO connection handling
+// Socket.IO connection events
 io.on("connection", (socket) => {
   console.log("🟢 A user connected");
   socket.on("disconnect", () => console.log("🔴 User disconnected"));
 });
 
-// Start server only after MongoDB connects
+// Start server after MongoDB connects
 connectDB().then(() => {
   const PORT = process.env.PORT || 5000;
   server.listen(PORT, () => {
@@ -80,5 +90,5 @@ connectDB().then(() => {
   });
 });
 
-// Optional: Export server for testing or external usage
+// Export server (optional)
 module.exports = server;

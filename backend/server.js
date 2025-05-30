@@ -3,35 +3,29 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const bookingsRouter = require("./routes/bookings");
 const cors = require("cors");
-const http = require("http");
-const { Server } = require("socket.io");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 dotenv.config();
 console.log("🔍 Debug: MONGO_URI:", process.env.MONGO_URI);
 
 const app = express();
-const server = http.createServer(app);
 
-// Allowed frontend origin(s)
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+// Allowed frontend origin
 const allowedOrigins = ["https://sri-lab.vercel.app", "http://localhost:5173"];
 
-// CORS for REST API
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"]
-}));
+// Use CORS for Express (REST APIs)
+app.use(
+  cors({
+    origin: allowedOrigins[0],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
-app.use(express.json()); // Parse JSON
-
-// Basic test route
+// Test route
 app.get("/", (req, res) => {
   res.send("✅ Backend is running!");
 });
@@ -39,7 +33,7 @@ app.get("/", (req, res) => {
 // Initialize Gemini AI
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// API Routes
+// Routes
 app.use("/api/bookings", bookingsRouter);
 
 // Chat route
@@ -61,34 +55,8 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Socket.IO setup
-const io = new Server(server, {
-  cors: {
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS (Socket.IO)"));
-      }
-    },
-    methods: ["GET", "POST"],
-    credentials: true
-  }
-});
+// Connect to DB when deployed (Vercel doesn't support persistent listeners)
+connectDB();
 
-// Socket.IO connection events
-io.on("connection", (socket) => {
-  console.log("🟢 A user connected");
-  socket.on("disconnect", () => console.log("🔴 User disconnected"));
-});
-
-// Start server after MongoDB connects
-connectDB().then(() => {
-  const PORT = process.env.PORT || 5000;
-  server.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
-  });
-});
-
-// Export server (optional)
-module.exports = server;
+// ✅ Export the Express app (Vercel will auto-handle requests)
+module.exports = app;

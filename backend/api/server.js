@@ -3,8 +3,6 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const bookingsRouter = require("./routes/bookings");
 const cors = require("cors");
-const http = require("http");
-const { Server } = require("socket.io");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 dotenv.config();
@@ -16,14 +14,16 @@ const app = express();
 app.use(express.json());
 
 // Allowed frontend origin
-const allowedOrigins = ["https://sri-lab.vercel.app","http://localhost:5173"];
+const allowedOrigins = ["https://sri-lab.vercel.app", "http://localhost:5173"];
 
 // Use CORS for Express (REST APIs)
-app.use(cors({
-  origin: allowedOrigins[0], // explicitly allow sri-lab.vercel.app
-  credentials: true,         // allow cookies if needed
-  methods: ["GET", "POST", "PUT", "DELETE"]
-}));
+app.use(
+  cors({
+    origin: allowedOrigins[0],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 // Test route
 app.get("/", (req, res) => {
@@ -55,30 +55,8 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// Create HTTP server and bind to app
-const server = http.createServer(app);
+// Connect to DB when deployed (Vercel doesn't support persistent listeners)
+connectDB();
 
-// Socket.IO setup
-const io = new Server(server, {
-  cors: {
-    origin: allowedOrigins[0],
-    methods: ["GET", "POST"]
-  }
-});
-
-// Socket.IO connection handling
-io.on("connection", (socket) => {
-  console.log("🟢 A user connected");
-  socket.on("disconnect", () => console.log("🔴 User disconnected"));
-});
-
-// Start server only after MongoDB connects
-connectDB().then(() => {
-  const PORT = process.env.PORT || 5000;
-  server.listen(PORT, () => {
-    console.log(`✅ Server running on port ${PORT}`);
-  });
-});
-
-// Optional: Export server for testing or external usage
-module.exports = server;
+// ✅ Export the Express app (Vercel will auto-handle requests)
+module.exports = app;

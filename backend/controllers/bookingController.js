@@ -77,13 +77,13 @@ exports.uploadReport = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ success: false, message: "Booking not found" });
     }
-    
-    booking.reportPath = req.file.path;
+    // Save Cloudinary URL and public_id
+    booking.reportPath = req.file.path; // Cloudinary URL
     booking.reportName = req.file.originalname;
     booking.reportMimeType = req.file.mimetype;
+    booking.reportCloudinaryId = req.file.filename; // Optional: for future deletion
     await booking.save();
-    
-    res.status(200).json({ success: true, message: "Report uploaded successfully" });
+    res.status(200).json({ success: true, message: "Report uploaded successfully", url: req.file.path });
   } catch (error) {
     console.error("Error uploading report:", error);
     res.status(500).json({ success: false, message: "Error uploading report: " + error.message });
@@ -96,16 +96,8 @@ exports.getReport = async (req, res) => {
     if (!booking || !booking.reportPath) {
       return res.status(404).json({ success: false, message: "Report not found" });
     }
-
-    if (!fs.existsSync(booking.reportPath)) {
-      return res.status(404).json({ success: false, message: "Report file not found" });
-    }
-
-    res.setHeader('Content-Type', booking.reportMimeType || 'application/pdf');
-    res.setHeader('Content-Disposition', `inline; filename="${booking.reportName}"`);
-    
-    const fileStream = fs.createReadStream(booking.reportPath);
-    fileStream.pipe(res);
+    // Redirect to Cloudinary URL
+    return res.redirect(booking.reportPath);
   } catch (error) {
     console.error("Error fetching report:", error);
     res.status(500).json({ success: false, message: "Error fetching report: " + error.message });

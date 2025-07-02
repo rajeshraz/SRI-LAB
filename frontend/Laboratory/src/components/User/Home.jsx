@@ -1,9 +1,10 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import BottomNavbar from '../BottomNavbar';
+import API_CONFIG from '../../config/api';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './stylings/Home.css';
 
 const Home = () => {
@@ -13,6 +14,8 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [viewingReport, setViewingReport] = useState(false);
+  const [viewingReportId, setViewingReportId] = useState(null);
+  const [downloadingReportId, setDownloadingReportId] = useState(null);
   
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -38,7 +41,7 @@ const Home = () => {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('https://sri-lab-backend.vercel.app/api/bookings/user');
+      const response = await axios.get(API_CONFIG.getUrl(API_CONFIG.endpoints.getUserBookings));
     
       if (response.data.success) {
         setBookings(prevBookings => {
@@ -74,58 +77,50 @@ const Home = () => {
 
   const handleViewReport = async (id) => {
     try {
-      setViewingReport(true);
-      const response = await axios.get(`https://sri-lab-backend.vercel.app/api/bookings/${id}/report`, {
+      setViewingReportId(id);
+      const response = await axios.get(API_CONFIG.getUrl(API_CONFIG.endpoints.getReport(id)), {
         responseType: 'blob',
       });
-
       const file = new Blob([response.data], {
         type: response.headers['content-type'] || 'application/pdf',
       });
       const fileURL = URL.createObjectURL(file);
-
       const newWindow = window.open(fileURL, '_blank');
       if (!newWindow) {
-        alert('Please allow popups to view the report');
+        toast.error('Please allow popups to view the report.');
       }
-
       setTimeout(() => {
         URL.revokeObjectURL(fileURL);
       }, 100);
     } catch (error) {
       console.error('Error fetching report:', error);
-      alert(
+      toast.error(
         error.response?.status === 404
           ? 'Report not available yet. Please try again later.'
           : 'Error viewing report. Please try again.'
       );
     } finally {
-      setViewingReport(false);
+      setViewingReportId(null);
     }
   };
 
   const handleDownloadReport = async (id) => {
     try {
-      const response = await axios.get(`https://sri-lab-backend.vercel.app/api/bookings/${id}/report`, {
+      setDownloadingReportId(id);
+      const response = await axios.get(API_CONFIG.getUrl(API_CONFIG.endpoints.getReport(id)), {
         responseType: 'blob',
       });
-
-      // Check if the response is successful
       if (response.status === 200) {
         const file = new Blob([response.data], {
           type: response.headers['content-type'] || 'application/pdf',
         });
         const fileURL = URL.createObjectURL(file);
-
         const link = document.createElement('a');
         link.href = fileURL;
-        // Get the original file extension from content-type
         const fileExt = response.headers['content-type']?.split('/')[1] || 'pdf';
-        link.download = `report-${new Date().toISOString()}.${fileExt}`; 
+        link.download = `report-${new Date().toISOString()}.${fileExt}`;
         document.body.appendChild(link);
         link.click();
-
-        // Cleanup
         document.body.removeChild(link);
         URL.revokeObjectURL(fileURL);
       } else {
@@ -133,7 +128,9 @@ const Home = () => {
       }
     } catch (error) {
       console.error('Error downloading the report:', error);
-      alert('Failed to download the report. Please try again later.');
+      toast.error('Failed to download the report. Please try again later.');
+    } finally {
+      setDownloadingReportId(null);
     }
   };
   
@@ -144,6 +141,7 @@ const Home = () => {
 
   return (
     <div className="homecss">
+      <ToastContainer position="bottom-right" autoClose={3000} />
       <div className="header">
         <span className="back-arrow" onClick={() => navigate("/")}>
           ←
@@ -212,19 +210,16 @@ const Home = () => {
                   <div className="button-container">
                     <button
                       onClick={() => handleViewReport(booking._id)}
-                      disabled={viewingReport || !booking.reportPath}
-                      className={booking.reportPath ? 'active-button' : 'disabled-button'}
+                      disabled={viewingReportId === booking._id}
                     >
-                      {viewingReport ? 'Loading...' : 'View Report'}
+                      {viewingReportId === booking._id ? 'Viewing...' : 'View Report'}
                     </button>
-                    {booking.reportPath && (
-                      <button
-                        onClick={() => handleDownloadReport(booking._id)}
-                        className="active-button"
-                      >
-                        Download Report
-                      </button>
-                    )}
+                    <button
+                      onClick={() => handleDownloadReport(booking._id)}
+                      disabled={downloadingReportId === booking._id}
+                    >
+                      {downloadingReportId === booking._id ? 'Downloading...' : 'Download'}
+                    </button>
                   </div>
                   {!booking.reportPath && (
                     <p className="no-report-text">Report not available yet</p>

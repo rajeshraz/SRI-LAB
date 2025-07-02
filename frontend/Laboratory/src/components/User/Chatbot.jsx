@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import API_CONFIG from '../../config/api';
 import './stylings/chatbot.css';
 
 
@@ -29,7 +30,7 @@ const Chatbot = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://sri-lab-backend.vercel.app/api/chat', {
+      const response = await fetch(API_CONFIG.getUrl(API_CONFIG.endpoints.chat), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -5,7 +5,7 @@ const bookingsRouter = require("./routes/bookings");
 const cors = require("cors");
 const http = require("http");
 const { Server } = require("socket.io");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const { generateResponse } = require("./services/geminiApi");
 
 dotenv.config();
 console.log("🔍 Debug: MONGO_URI:", process.env.MONGO_URI);
@@ -15,23 +15,37 @@ const app = express();
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Allowed frontend origin
-const allowedOrigins = ["https://sri-lab.vercel.app","http://localhost:5173"];
+// Allowed frontend origins for both development and production
+const allowedOrigins = [
+  "http://localhost:5173",           // Local development
+  "http://localhost:3000",           // Alternative local port
+  "https://sri-lab.vercel.app",      // Production frontend
+  "https://sri-lab-frontend.vercel.app", // Alternative production URL
+  "https://sri-lab-backend.vercel.app"   // Backend URL (if needed)
+];
 
 // Use CORS for Express (REST APIs)
 app.use(cors({
-  origin: allowedOrigins[0], // explicitly allow sri-lab.vercel.app
-  credentials: true,         // allow cookies if needed
-  methods: ["GET", "POST", "PUT", "DELETE"]
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log("❌ CORS blocked origin:", origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
 }));
 
 // Test route
 app.get("/", (req, res) => {
   res.send("✅ Backend is running!");
 });
-
-// Initialize Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // Routes
 app.use("/api/bookings", bookingsRouter);
@@ -42,13 +56,8 @@ app.post("/api/chat", async (req, res) => {
     const { message } = req.body;
     if (!message) return res.status(400).json({ error: "Message is required" });
 
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-    const result = await model.generateContent(message);
-    const response = await result.response;
-
-    if (!response) return res.status(500).json({ error: "Failed to generate response" });
-
-    res.json({ response: response.text() });
+    const response = await generateResponse(message);
+    res.json({ response });
   } catch (error) {
     console.error("❌ Chat API Error:", error);
     res.status(500).json({ error: "Failed to process the request" });
@@ -61,8 +70,9 @@ const server = http.createServer(app);
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins[0],
-    methods: ["GET", "POST"]
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
@@ -77,6 +87,7 @@ connectDB().then(() => {
   const PORT = process.env.PORT || 5000;
   server.listen(PORT, () => {
     console.log(`✅ Server running on port ${PORT}`);
+    console.log(`🌐 CORS enabled for origins:`, allowedOrigins);
   });
 });
 

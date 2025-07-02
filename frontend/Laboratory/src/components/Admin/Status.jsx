@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Pie, Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
+import API_CONFIG from '../../config/api';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title);
 
@@ -19,7 +20,7 @@ const Status = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('https://sri-lab-backend.vercel.app/api/bookings/all');
+      const response = await axios.get(API_CONFIG.getUrl(API_CONFIG.endpoints.getAllBookings));
       if (response.data.success) {
         const bookings = response.data.data;
         const total = bookings.length;

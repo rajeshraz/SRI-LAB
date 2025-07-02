@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import API_CONFIG from '../../config/api';
 import './stylings/Bookingform.css';
 
 const BookingForm = () => {
@@ -20,7 +21,7 @@ const BookingForm = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      await axios.post("https://sri-lab-backend.vercel.app/api/bookings/add", formData);
+      await axios.post(API_CONFIG.getUrl(API_CONFIG.endpoints.addBooking), formData);
       setStatus({
         type: 'success',
         message: 'Booking confirmed! Admin has been notified.'

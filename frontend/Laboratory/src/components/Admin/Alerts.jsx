@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import API_CONFIG from '../../config/api';
 import { useNavigate } from 'react-router-dom';
 import './adminstylings/alerts.css';
 import { toast, ToastContainer } from 'react-toastify';  // Import ToastContainer
@@ -23,18 +24,17 @@ function Alerts() {
   const fetchBookings = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("https://sri-lab-backend.vercel.app/api/bookings/all", {
-  withCredentials: true, 
-});
-
+      const response = await axios.get(API_CONFIG.getUrl(API_CONFIG.endpoints.getAllBookings), {
+        withCredentials: true, 
+      });
       if (response.data.success) {
-        setBookings(response.data.data || []);
+        setBookings(response.data.data);
         setError(null);
       } else {
         throw new Error(response.data.message || 'Failed to fetch bookings');
       }
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      console.error("Error fetching bookings:", error);
       setError(
         error.response?.data?.message ||
           error.message ||
@@ -55,22 +55,25 @@ function Alerts() {
 
     try {
       setDeletingBooking(selectedBookingId);
-      const response = await axios.delete(`https://sri-lab-backend.vercel.app/api/bookings/${selectedBookingId}`);
+      const response = await axios.delete(API_CONFIG.getUrl(API_CONFIG.endpoints.deleteBooking(selectedBookingId)));
       if (response.data && response.data.success) {
         setBookings((prevBookings) =>
           prevBookings.filter((booking) => booking._id !== selectedBookingId)
         );
+        setShowConfirmDialog(false);
+        setSelectedBookingId(null);
+        toast.success('Booking deleted successfully!');
       } else {
         throw new Error(response.data.message || 'Failed to delete booking');
       }
     } catch (error) {
-      console.error('Error deleting booking:', error);
+      console.error("Error deleting booking:", error);
+      toast.error('Failed to delete booking. Please try again.');
     } finally {
       setDeletingBooking(null);
-      setSelectedBookingId(null);
-      setShowConfirmDialog(false);
     }
   };
+
   const handleUpload = async (id, file) => {
     if (!file) return;
   
@@ -80,7 +83,7 @@ function Alerts() {
       formData.append('report', file);
   
       const response = await axios.post(
-        `https://sri-lab-backend.vercel.app/api/bookings/${id}/upload`,
+        API_CONFIG.getUrl(API_CONFIG.endpoints.uploadReport(id)),
         formData,
         { headers: { 'Content-Type': 'multipart/form-data' } }
       );
@@ -93,9 +96,8 @@ function Alerts() {
               : booking
           )
         );
-        // Display success toast after uploading the file
         toast.success('Report uploaded successfully!', {
-          position: 'bottom-right',  // Direct string for position
+          position: 'bottom-right',
           autoClose: 3000,
         });
       } else {
@@ -103,6 +105,10 @@ function Alerts() {
       }
     } catch (error) {
       console.error('Error uploading report:', error);
+      toast.error('Failed to upload report. Please try again.', {
+        position: 'bottom-right',
+        autoClose: 3000,
+      });
     } finally {
       setUploadingReport(null);
     }
@@ -163,16 +169,18 @@ function Alerts() {
                 <button
                   className="delete-btn"
                   onClick={() => initiateDelete(booking._id)}
+                  disabled={deletingBooking === booking._id}
                 >
-                  Delete
+                  {deletingBooking === booking._id ? 'Deleting...' : 'Delete'}
                 </button>
-                <label htmlFor={`file-${booking._id}`} className="upload-btn">
-                  Upload Report
+                <label htmlFor={`file-${booking._id}`} className={`upload-btn ${uploadingReport === booking._id ? 'uploading' : ''} ${booking.reportPath ? 'uploaded' : ''}`}>
+                  {uploadingReport === booking._id ? 'Uploading...' : booking.reportPath ? '✓ Uploaded' : 'Upload Report'}
                   <input
                     type="file"
                     id={`file-${booking._id}`}
                     style={{ display: 'none' }}
                     onChange={(e) => handleUpload(booking._id, e.target.files[0])}
+                    disabled={uploadingReport === booking._id}
                   />
                 </label>
               </div>

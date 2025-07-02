@@ -1,7 +1,7 @@
 // API Configuration
 const API_CONFIG = {
   // Set this to 'local' for development, 'production' for deployed version
-  ENVIRONMENT: 'local',
+  ENVIRONMENT: 'production',
   
   // API URLs for different environments
   BASE_URLS: {

@@ -6,7 +6,7 @@ const API_CONFIG = {
   // API URLs for different environments
   BASE_URLS: {
     local: 'http://localhost:5000',
-    production: 'https://sri-lab-backend.vercel.app'
+    production: 'https://sri-lab.onrender.com'
   },
   
   // Get the current base URL

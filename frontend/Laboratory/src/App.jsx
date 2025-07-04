@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import LandingPage from "./components/LandingPage";
 import AdminLogin from "./components/Admin/Login";
@@ -13,6 +13,16 @@ import Profile from "./components/User/Profile";
 import Status from "./components/Admin/Status";
 
 const App = () => {
+  // Mobile viewport height workaround for fixed bottom navbar
+  useEffect(() => {
+    const handleResize = () => {
+      document.body.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
+    };
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const ShowNavbar = () => {
     const location = useLocation();
     const hideNavbarPaths = ['/', '/admin/login'];

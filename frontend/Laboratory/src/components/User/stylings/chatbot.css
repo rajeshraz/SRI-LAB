@@ -4,15 +4,18 @@
 
 }
 
+:root {
+  --navbar-height: 56px;
+}
+
 /* Ensure chat input is always above the bottom navbar on mobile */
 @media (max-width: 768px) {
   .chatbotcss {
-    height: 100vh;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    flex: 1 1 auto;
     justify-content: flex-end;
-    padding-bottom: 60px; /* Reserve space for bottom navbar */
+    padding-bottom: var(--navbar-height); /* Reserve space for bottom navbar */
     box-sizing: border-box;
   }
   .chatbotcss form {
@@ -35,8 +38,11 @@
 }
 
 @media (max-width: 480px) {
+  :root {
+    --navbar-height: 48px;
+  }
   .chatbotcss {
-    padding-bottom: 60px;
+    padding-bottom: var(--navbar-height);
   }
   .chatbotcss form {
     padding: 8px 4px;

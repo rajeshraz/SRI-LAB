@@ -61,7 +61,7 @@ const Chatbot = () => {
   };
 
   return (
-    <div className='chatbotcss' style={{ display: 'flex', flexDirection: 'column', height: 'calc(100vh - 60px)', background: 'white' }}>
+    <div className='chatbotcss' style={{ display: 'flex', flexDirection: 'column', background: 'white' }}>
       {/* Messages Container */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
         {messages.map((msg, idx) => (

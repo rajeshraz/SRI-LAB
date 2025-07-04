@@ -14,7 +14,7 @@ const AdminLogin = () => {
     e.preventDefault();
     const { username, password } = adminCredentials;
 
-    if (username === "srilab" && password === "srilab") {
+    if (username === "Srilab" && password === "Srilab") {
       navigate("/admin/home");
     } else {
       setError("Invalid username or password.");

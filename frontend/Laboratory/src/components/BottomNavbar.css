@@ -24,5 +24,28 @@
     color: #007bff;
     font-weight: 100px;
   }
+
+@media (max-width: 768px) {
+  .bottom-navbar {
+    padding: 0.5rem 0.5rem 0.7rem 0.5rem;
+    height: 56px;
+    min-height: 56px;
+    z-index: 1000;
+  }
+  .bottom-navbar a {
+    font-size: 0.85rem;
+    gap: 2px;
+  }
+}
+@media (max-width: 480px) {
+  .bottom-navbar {
+    padding: 0.3rem 0.2rem 0.5rem 0.2rem;
+    height: 48px;
+    min-height: 48px;
+  }
+  .bottom-navbar a {
+    font-size: 0.8rem;
+  }
+}
   
   

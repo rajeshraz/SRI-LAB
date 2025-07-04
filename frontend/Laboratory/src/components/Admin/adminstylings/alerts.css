@@ -181,13 +181,14 @@
     }
     
     .booking-item {
-      padding: 12px;
-      margin-bottom: 12px;
+      padding: 10px;
+      margin-bottom: 10px;
     }
     
     .actions {
       flex-direction: column;
       gap: 8px;
+      align-items: stretch;
     }
     
     .delete-btn,
@@ -195,6 +196,15 @@
       width: 100%;
       padding: 12px;
       font-size: 16px;
+    }
+    .upload-btn {
+      width: 90%;
+      max-width: 160px;
+      font-size: 15px;
+      padding: 8px 0;
+      margin: 0 auto;
+      display: block;
+      box-sizing: border-box;
     }
     
     .bookings-title {
@@ -216,6 +226,19 @@
     .dialog-cancel-btn {
       width: 100%;
       padding: 12px;
+    }
+  }
+  @media (max-width: 480px) {
+    .upload-btn {
+      width: 100%;
+      max-width: 120px;
+      font-size: 13px;
+      padding: 7px 0;
+      margin: 0 auto;
+    }
+    .booking-item {
+      padding: 6px;
+      margin-bottom: 6px;
     }
   }
   

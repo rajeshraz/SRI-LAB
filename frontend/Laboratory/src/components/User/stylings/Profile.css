@@ -65,3 +65,24 @@
     }
   }
   
+@media screen and (max-width: 480px) {
+  .profile-container {
+    padding: 8px;
+  }
+  .profile-card {
+    padding: 10px;
+    max-width: 98vw;
+  }
+  .profile-image {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 10px;
+  }
+  .profile-heading {
+    font-size: 16px;
+  }
+  .profile-description {
+    font-size: 12px;
+  }
+}
+  

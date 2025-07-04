@@ -74,4 +74,37 @@
     color: #721c24;
   }
   
+  @media (max-width: 768px) {
+    .bookingformcss {
+      padding: 0.5rem;
+    }
+    .form-container {
+      gap: 0.7rem;
+    }
+    .input-style {
+      font-size: 15px;
+      padding: 0.4rem;
+    }
+    .submit-button {
+      font-size: 15px;
+      padding: 0.6rem;
+    }
+  }
+  @media (max-width: 480px) {
+    .bookingformcss {
+      padding: 0.3rem;
+    }
+    .form-container {
+      gap: 0.5rem;
+    }
+    .input-style {
+      font-size: 14px;
+      padding: 0.3rem;
+    }
+    .submit-button {
+      font-size: 14px;
+      padding: 0.5rem;
+    }
+  }
+  
   

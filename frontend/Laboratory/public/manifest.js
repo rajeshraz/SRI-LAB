@@ -2,8 +2,8 @@ const manifestForPlugIn = {
     registerType:'prompt',
     includeAssets:['/lab-image.jpg'],
     manifest:{
-      name:"React-vite-app",
-      short_name:"react-vite-app",
+      name: "Sri lab",
+      short_name: "Sri lab",
       description:"I am a simple vite app",
       icons:[{
         src: '/lab-image.jpg',

@@ -16,10 +16,7 @@
     box-sizing: border-box;
   }
   .chatbotcss form {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 60px; /* Place just above the bottom navbar */
+    /* Remove position: fixed and bottom */
     background: white;
     padding: 10px 8px;
     z-index: 100;
@@ -43,6 +40,5 @@
   }
   .chatbotcss form {
     padding: 8px 4px;
-    bottom: 60px;
   }
 }

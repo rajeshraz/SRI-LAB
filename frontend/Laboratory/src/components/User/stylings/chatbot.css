@@ -51,6 +51,15 @@ html, body {
   }
 }
 
+@media (min-width: 769px) {
+  .chatbotcss {
+    padding-bottom: 56px; /* Height of BottomNavbar */
+  }
+  .input-area {
+    margin-bottom: 0;
+  }
+}
+
 .chatbotcss {
   display: flex;
   flex-direction: column;

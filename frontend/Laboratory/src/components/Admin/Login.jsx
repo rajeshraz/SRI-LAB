@@ -13,8 +13,11 @@ const AdminLogin = () => {
   const handleAdminLogin = (e) => {
     e.preventDefault();
     const { username, password } = adminCredentials;
+    // Get admin credentials from environment variables
+    const adminUsername = import.meta.env.VITE_ADMIN_USERNAME || "Srilab";
+    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || "Srilab";
 
-    if (username === "Srilab" && password === "Srilab") {
+    if (username === adminUsername && password === adminPassword) {
       navigate("/admin/home");
     } else {
       setError("Invalid username or password.");

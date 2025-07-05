@@ -1,3 +1,4 @@
+
 const express = require('express');
 const router = express.Router();
 const { storage } = require('../config/cloudinary');
@@ -5,6 +6,7 @@ const multer = require('multer');
 const upload = multer({ storage });
 const path = require('path');
 const fs = require('fs');
+
 const { 
   addBooking, 
   getAllBookings, 

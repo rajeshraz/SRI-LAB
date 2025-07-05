@@ -85,6 +85,20 @@ cd ../frontend/Laboratory
 npm install
 ```
 
+- Create a `.env` file in `/frontend/Laboratory` with:
+  ```
+  # Admin Credentials
+  VITE_ADMIN_USERNAME=your_admin_username
+  VITE_ADMIN_PASSWORD=your_admin_password
+  
+  # API Configuration
+  VITE_API_ENVIRONMENT=production
+  VITE_API_BASE_URL=https://sri-lab.onrender.com
+  
+  # Contact Information
+  VITE_LAB_MOBILE_NUMBER=your_lab_mobile_number
+  ```
+
 - To run locally:
   ```bash
   npm run dev
@@ -93,12 +107,37 @@ npm install
 
 ---
 
+## Environment Variables
+
+### Backend (.env)
+- `MONGO_URI`: MongoDB connection string
+- `GEMINI_API_KEY`: Google Gemini API key for chatbot
+- `CLOUDINARY_CLOUD_NAME`: Cloudinary cloud name
+- `CLOUDINARY_API_KEY`: Cloudinary API key
+- `CLOUDINARY_API_SECRET`: Cloudinary API secret
+
+### Frontend (.env)
+- `VITE_ADMIN_USERNAME`: Admin login username
+- `VITE_ADMIN_PASSWORD`: Admin login password
+- `VITE_API_ENVIRONMENT`: API environment (local/production)
+- `VITE_API_BASE_URL`: Backend API base URL
+- `VITE_LAB_MOBILE_NUMBER`: Laboratory contact mobile number
+
+**Note:** All frontend environment variables must start with `VITE_` to be accessible in the React app.
+
+---
+
 ## Deployment
 
 ### Frontend (Vercel)
 
 - Connect your GitHub repo to Vercel.
-- Set environment variables if needed.
+- Set environment variables in Vercel dashboard:
+  - `VITE_ADMIN_USERNAME`
+  - `VITE_ADMIN_PASSWORD`
+  - `VITE_API_ENVIRONMENT`
+  - `VITE_API_BASE_URL`
+  - `VITE_LAB_MOBILE_NUMBER`
 - Vercel auto-deploys on push to `main`/`master`.
 
 ### Backend (Render)
@@ -112,7 +151,7 @@ npm install
 ## Usage
 
 - **User:** Book appointments, chat, view/download reports.
-- **Admin:** Login, manage bookings, upload/delete reports, view dashboard.
+- **Admin:** Login with credentials from environment variables, manage bookings, upload/delete reports, view dashboard.
 - **Chatbot:** Ask health/lab-related questions.
 
 ---
@@ -121,7 +160,8 @@ npm install
 
 - **CORS errors:** Check allowed origins in backend.
 - **API errors:** Check backend logs and environment variables.
-- **PWA icon issues:** Ensure `lab-image-2.png` is a square PNG and referenced in `manifest.webmanifest`.
+- **PWA icon issues:** Ensure `maskable_icon.png` is a square PNG and referenced in `manifest.webmanifest`.
+- **Admin login issues:** Verify environment variables are set correctly.
 
 ---
 

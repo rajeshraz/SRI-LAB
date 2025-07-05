@@ -1,12 +1,12 @@
 // API Configuration
 const API_CONFIG = {
-  // Set this to 'local' for development, 'production' for deployed version
-  ENVIRONMENT: 'production',
+  // Get environment from environment variable
+  ENVIRONMENT: import.meta.env.VITE_API_ENVIRONMENT || 'production',
   
   // API URLs for different environments
   BASE_URLS: {
     local: 'http://localhost:5000',
-    production: 'https://sri-lab.onrender.com'
+    production: import.meta.env.VITE_API_BASE_URL || 'https://sri-lab.onrender.com'
   },
   
   // Get the current base URL

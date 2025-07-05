@@ -161,7 +161,7 @@ const Home = () => {
           <button onClick={() => navigate('/user/book')} style={{ marginRight: '20px' }}>
             Book
           </button>
-          <button onClick={() => window.location.href = 'tel:9908841335'}>Call</button>
+          <button onClick={() => window.location.href = `tel:${import.meta.env.VITE_LAB_MOBILE_NUMBER || '9908841335'}`}>Call</button>
         </div>
   
         <h2>Your Bookings</h2>

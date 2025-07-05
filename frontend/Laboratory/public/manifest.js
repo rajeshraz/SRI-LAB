@@ -6,22 +6,34 @@ const manifestForPlugIn = {
       short_name: "Sri lab",
       description:"I am a simple vite app",
       icons:[{
-        src: '/app-icon.jpg',
-        sizes:'192x192',
-        type:'image/jpeg',
-        purpose:'any maskable'
-      },
-      {
-        src:'/app-icon.jpg',
+        src: '/lab-image.jpg',
         sizes:'512x512',
         type:'image/jpeg',
         purpose:'any maskable'
       },
       {
-        src: '/app-icon.jpg',
-        sizes:'180x180',
+        src:'/lab-image.jpg',
+        sizes:'1024x1024',
+        type:'image/jpeg',
+        purpose:'any maskable'
+      },
+      {
+        src: '/lab-image.jpg',
+        sizes:'1920x1920',
         type:'image/jpeg',
         purpose:'any maskable',
+      },
+      {
+        src: '/lab-image.jpg',
+        sizes:'256x256',
+        type:'image/jpeg',
+        purpose:'any maskable'
+      },
+      {
+        src: '/lab-image.jpg',
+        sizes:'384x384',
+        type:'image/jpeg',
+        purpose:'any maskable'
       }
     ],
     theme_color:'#171717',

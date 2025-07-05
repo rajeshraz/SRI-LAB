@@ -61,9 +61,9 @@ const Chatbot = () => {
   };
 
   return (
-    <div className='chatbotcss' style={{ display: 'flex', flexDirection: 'column', background: 'white' }}>
+    <div className='chatbotcss' style={{ display: 'flex', flexDirection: 'column', background: 'white', flex: 1, minHeight: 0 }}>
       {/* Messages Container */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '20px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 8px' }}>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ 
             display: 'flex',
@@ -154,10 +154,10 @@ const Chatbot = () => {
       {/* Input Container */}
       <div style={{
         borderTop: '1px solid #e5e5e5',
-        padding: '20px',
+        padding: '8px',
         backgroundColor: 'white'
       }}>
-        <form onSubmit={handleSend} style={{ display: 'flex', gap: '10px' }}>
+        <form onSubmit={handleSend} style={{ display: 'flex', gap: '8px' }}>
           <input
             type="text"
             value={input}
@@ -172,49 +172,22 @@ const Chatbot = () => {
             }}
             disabled={isLoading}
           />
-         <button
-  type="submit"
-  disabled={isLoading || !input.trim()}
-  style={{
-    padding: '8px 16px',
-    backgroundColor: isLoading || !input.trim() ? '#e0e0e0' : '#0078D4',
-    color: isLoading || !input.trim() ? '#9e9e9e' : '#ffffff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: isLoading || !input.trim() ? 'not-allowed' : 'pointer',
-    transition: 'all 0.3s ease-in-out',
-    fontSize: '14px',
-    fontWeight: 'bold',
-    boxShadow: isLoading || !input.trim() ? 'none' : '0 4px 8px rgba(0, 0, 0, 0.2)',
-  }}
-  onMouseEnter={(e) => {
-    if (!isLoading && input.trim()) {
-      e.target.style.backgroundColor = '#005a9e';
-      e.target.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.3)';
-    }
-  }}
-  onMouseLeave={(e) => {
-    if (!isLoading && input.trim()) {
-      e.target.style.backgroundColor = '#0078D4';
-      e.target.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
-    }
-  }}
-  onMouseDown={(e) => {
-    if (!isLoading && input.trim()) {
-      e.target.style.transform = 'scale(0.98)';
-    }
-  }}
-  onMouseUp={(e) => {
-    if (!isLoading && input.trim()) {
-      e.target.style.transform = 'scale(1)';
-    }
-  }}
->
-  Send
-</button>
-
-          
-          
+          <button
+            type="submit"
+            disabled={isLoading || !input.trim()}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: isLoading || !input.trim() ? '#e0e0e0' : '#0078D4',
+              color: isLoading || !input.trim() ? '#9e9e9e' : '#ffffff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: isLoading || !input.trim() ? 'not-allowed' : 'pointer',
+              fontSize: '14px',
+              fontWeight: 'bold'
+            }}
+          >
+            Send
+          </button>
         </form>
       </div>
     </div>

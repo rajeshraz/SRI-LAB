@@ -14,8 +14,9 @@
     display: flex;
     flex-direction: column;
     flex: 1 1 auto;
-    justify-content: flex-end;
-    padding-bottom: var(--navbar-height); /* Reserve space for bottom navbar */
+    min-height: 0;
+    background: linear-gradient(to right, #e3f2fd, #bbdefb);
+    padding-bottom: 0;
     box-sizing: border-box;
   }
   .chatbotcss form {

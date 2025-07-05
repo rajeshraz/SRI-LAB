@@ -1,0 +1,248 @@
+.homecss {
+    background: linear-gradient(to right, #e3f2fd, #bbdefb);
+    padding: 0;
+    margin: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+  }
+  
+  .back-arrow {
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+  }
+  
+  .back-arrow:hover {
+    background-color: #087f23;
+    transform: scale(1.1);
+  }
+  
+  .greeting-text {
+    margin: 0;
+    margin-left: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    color: #004d40;
+  }
+  
+  .content {
+    flex: 1; /* Ensures content takes up remaining space */
+    overflow-y: auto; /* Adds vertical scrolling */
+    padding: 10px 20px; /* Adds spacing around the content */
+    box-sizing: border-box;
+  }
+  
+  .bookings-container {
+    margin-bottom: 80px; /* Ensures content doesn't overlap with bottom navbar */
+  }
+  
+  .booking-item {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #ffffff;
+    border: 3px solid #4CAF50; /* Thicker border */
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .booking-item p {
+    margin: 5px 0;
+    color: #333;
+    font-size: 16px;
+  }
+  
+  /* Clean, simple button styles for user dashboard */
+  .booking-item button {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    min-width: 120px;
+    text-align: center;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    background: #4CAF50;
+  }
+  .booking-item button:last-of-type {
+    background: #2196F3;
+  }
+  .booking-item button:disabled {
+    background: #ccc !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .booking-item button:active {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+  }
+  /* Subtle hover for desktop only */
+  @media (hover: hover) and (pointer: fine) {
+    .booking-item button:hover:not(:disabled) {
+      background: #388e3c;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    }
+    .booking-item button:last-of-type:hover:not(:disabled) {
+      background: #1769aa;
+    }
+  }
+  
+  .bottom-navbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .download-button {
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+    min-width: 120px;
+    text-align: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  
+  .download-button:disabled {
+    background: #ccc !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  .download-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  }
+  
+  /* Remove hover effects for booking-item buttons and download-button */
+  .booking-item button:hover,
+  .download-button:hover {
+    background: unset !important;
+    color: unset !important;
+    opacity: unset !important;
+    box-shadow: unset !important;
+    transform: unset !important;
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 16px 10px 10px 10px;
+      gap: 8px;
+      position: relative;
+    }
+    .back-arrow {
+      position: static;
+      margin-bottom: 4px;
+      margin-right: 0;
+    }
+    .greeting-text {
+      margin: 0;
+      font-size: 18px;
+      margin-left: 0;
+      margin-top: 0;
+      word-break: break-word;
+    }
+    
+    .content {
+      padding: 10px 15px;
+    }
+    
+    .booking-item {
+      padding: 12px;
+      margin-bottom: 15px;
+    }
+    
+    .booking-item p {
+      font-size: 14px;
+    }
+    
+    .booking-item button {
+      width: 100%;
+      margin: 5px 0;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+    
+    .download-button {
+      width: 100%;
+      margin: 5px 0;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 10px;
+    }
+  }
+  
+  /* Extra small screens */
+  @media (max-width: 480px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px 6px 6px 6px;
+      gap: 6px;
+    }
+    .back-arrow {
+      position: static;
+      margin-bottom: 2px;
+      margin-right: 0;
+    }
+    .greeting-text {
+      font-size: 16px;
+      margin-left: 0;
+      margin-top: 0;
+    }
+    
+    .content {
+      padding: 8px 12px;
+    }
+    
+    .booking-item {
+      padding: 10px;
+    }
+    
+    .booking-item button {
+      padding: 12px;
+      font-size: 15px;
+    }
+    
+    .download-button {
+      padding: 12px;
+      font-size: 15px;
+    }
+  }
+  
+  /* Remove all previous banner styles */
+  .styled-banner, .banner-close { display: none !important; }
+  

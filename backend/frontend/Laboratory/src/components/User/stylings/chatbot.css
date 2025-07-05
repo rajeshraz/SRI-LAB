@@ -1,0 +1,83 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: none !important;
+}
+
+:root {
+  --navbar-height: 56px;
+}
+
+/* Ensure chat input is always above the bottom navbar on mobile */
+@media (max-width: 768px) {
+  .chatbotcss {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    background: linear-gradient(to right, #e3f2fd, #bbdefb);
+    padding-bottom: 0;
+    box-sizing: border-box;
+  }
+  .chatbotcss form {
+    /* Remove position: fixed and bottom */
+    background: white;
+    padding: 10px 8px;
+    z-index: 100;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+    width: 100vw;
+    max-width: 100vw;
+  }
+  .chatbotcss input[type="text"] {
+    font-size: 16px;
+    padding: 10px;
+  }
+  .chatbotcss button[type="submit"] {
+    font-size: 16px;
+    padding: 10px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --navbar-height: 48px;
+  }
+  .chatbotcss {
+    padding-bottom: var(--navbar-height);
+  }
+  .chatbotcss form {
+    padding: 8px 4px;
+  }
+}
+
+@media (min-width: 769px) {
+  .chatbotcss {
+    padding-bottom: 56px; /* Height of BottomNavbar */
+  }
+  .input-area {
+    margin-bottom: 0;
+  }
+}
+
+.chatbotcss {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px); /* 56px is the BottomNavbar height, adjust if needed */
+  background: none;
+  box-sizing: border-box;
+}
+
+.messages-area {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 16px 8px;
+  /* Remove background here if present */
+  background: transparent;
+}
+
+.input-area {
+  border-top: 1px solid #e5e5e5;
+  padding: 8px;
+  background: transparent;
+}

@@ -61,9 +61,9 @@ const Chatbot = () => {
   };
 
   return (
-    <div className='chatbotcss' style={{ display: 'flex', flexDirection: 'column', background: 'white', flex: 1, minHeight: 0 }}>
+    <div className='chatbotcss'>
       {/* Messages Container */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px 8px' }}>
+      <div className='messages-area'>
         {messages.map((msg, idx) => (
           <div key={idx} style={{ 
             display: 'flex',
@@ -152,11 +152,7 @@ const Chatbot = () => {
       </div>
 
       {/* Input Container */}
-      <div style={{
-        borderTop: '1px solid #e5e5e5',
-        padding: '8px',
-        backgroundColor: 'white'
-      }}>
+      <div className='input-area'>
         <form onSubmit={handleSend} style={{ display: 'flex', gap: '8px' }}>
           <input
             type="text"

@@ -16,6 +16,8 @@ const Home = () => {
   const [viewingReport, setViewingReport] = useState(false);
   const [viewingReportId, setViewingReportId] = useState(null);
   const [downloadingReportId, setDownloadingReportId] = useState(null);
+  const [serverTimeout, setServerTimeout] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(null);
   
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -26,9 +28,7 @@ const Home = () => {
     else if (hours < 18) setGreeting('Good Afternoon');
     else setGreeting('Good Evening');
 
-    fetchBookings();
-    const interval = setInterval(fetchBookings, 10000);
-    return () => clearInterval(interval);
+    fetchBookingsWithTimeout();
   }, []);
 
   useEffect(() => {
@@ -38,10 +38,31 @@ const Home = () => {
     setFilteredBookings(filtered);
   }, [searchTerm, bookings]);
 
-  const fetchBookings = async () => {
+  const fetchBookingsWithTimeout = async () => {
     try {
       setLoading(true);
+      setError(null);
+      setServerTimeout(false);
+      
+      // Clear any existing timeout
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      // Set a 60-second timeout
+      const timeout = setTimeout(() => {
+        setServerTimeout(true);
+        setLoading(false);
+        setError('Server is taking longer than usual to respond. Please try refreshing.');
+      }, 60000); // 60 seconds
+
+      setTimeoutId(timeout);
+
       const response = await axios.get(API_CONFIG.getUrl(API_CONFIG.endpoints.getUserBookings));
+    
+      // Clear the timeout since we got a response
+      clearTimeout(timeout);
+      setTimeoutId(null);
     
       if (response.data.success) {
         setBookings(prevBookings => {
@@ -60,19 +81,31 @@ const Home = () => {
           return [...updatedBookings, ...brandNewBookings];
         });
         setError(null);
+        setServerTimeout(false);
       } else {
         throw new Error(response.data.message || 'Failed to fetch bookings');
       }
     } catch (error) {
+      // Clear the timeout since we got an error
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        setTimeoutId(null);
+      }
+      
       console.error('Error fetching bookings:', error);
       setError(
         error.response?.data?.message ||
           error.message ||
           'Failed to fetch bookings. Please try again later.'
       );
+      setServerTimeout(false);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRefresh = () => {
+    fetchBookingsWithTimeout();
   };
 
   const handleViewReport = async (id) => {
@@ -166,31 +199,48 @@ const Home = () => {
   
         <h2>Your Bookings</h2>
         <div className="bookings-container">
-          <div style={{ position: 'relative', marginBottom: '20px' }}>
-            <input
-              type="text"
-              placeholder="Search bookings by name"
-              value={searchTerm}
-              onChange={handleSearch}
+          <div style={{ position: 'relative', marginBottom: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <input
+                type="text"
+                placeholder="Search bookings by name"
+                value={searchTerm}
+                onChange={handleSearch}
+                style={{
+                  width: '300px',
+                  padding: '10px 10px 10px 35px',
+                  border: '3px solid #ddd',
+                  borderRadius: '4px',
+                }}
+              />
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  color: '#666',
+                }}
+              >
+                🔍
+              </span>
+            </div>
+            <button
+              onClick={handleRefresh}
+              disabled={loading}
               style={{
-                width: '60%',
-                padding: '10px 10px 10px 35px',
-                marginLeft: '30px',
-                border: '3px solid #ddd',
+                marginLeft: '10px',
+                padding: '10px 15px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
                 borderRadius: '4px',
-              }}
-            />
-            <span
-              style={{
-                position: 'absolute',
-                left: '40px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: '#666',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                opacity: loading ? 0.6 : 1,
               }}
             >
-              🔍
-            </span>
+              {loading ? 'Loading...' : '🔄 Refresh'}
+            </button>
           </div>
           {loading && <p>Loading bookings...</p>}
           {error && <p style={{ color: 'red' }}>Error: {error}</p>}

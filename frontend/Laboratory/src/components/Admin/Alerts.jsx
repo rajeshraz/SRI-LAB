@@ -13,36 +13,70 @@ function Alerts() {
   const [deletingBooking, setDeletingBooking] = useState(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [selectedBookingId, setSelectedBookingId] = useState(null);
+  const [serverTimeout, setServerTimeout] = useState(false);
+  const [timeoutId, setTimeoutId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchBookings();
-    const interval = setInterval(fetchBookings, 30000);
-    return () => clearInterval(interval);
+    fetchBookingsWithTimeout();
   }, []);
 
-  const fetchBookings = async () => {
+  const fetchBookingsWithTimeout = async () => {
     try {
       setLoading(true);
+      setError(null);
+      setServerTimeout(false);
+      
+      // Clear any existing timeout
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      // Set a 60-second timeout
+      const timeout = setTimeout(() => {
+        setServerTimeout(true);
+        setLoading(false);
+        setError('Server is taking longer than usual to respond. Please try refreshing.');
+      }, 60000); // 60 seconds
+
+      setTimeoutId(timeout);
+
       const response = await axios.get(API_CONFIG.getUrl(API_CONFIG.endpoints.getAllBookings), {
         withCredentials: true, 
       });
+      
+      // Clear the timeout since we got a response
+      clearTimeout(timeout);
+      setTimeoutId(null);
+      
       if (response.data.success) {
         setBookings(response.data.data);
         setError(null);
+        setServerTimeout(false);
       } else {
         throw new Error(response.data.message || 'Failed to fetch bookings');
       }
     } catch (error) {
+      // Clear the timeout since we got an error
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        setTimeoutId(null);
+      }
+      
       console.error("Error fetching bookings:", error);
       setError(
         error.response?.data?.message ||
           error.message ||
           'Failed to fetch bookings. Please try again later.'
       );
+      setServerTimeout(false);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRefresh = () => {
+    fetchBookingsWithTimeout();
   };
 
   const initiateDelete = (id) => {
@@ -116,8 +150,37 @@ function Alerts() {
   
 
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return (
+    <div className="alerts-container">
+      <div className="back-arrow" onClick={() => navigate("/")}>←</div>
+      <div style={{ textAlign: 'center', padding: '40px' }}>
+        <p>Loading bookings...</p>
+      </div>
+    </div>
+  );
+
+  if (error) return (
+    <div className="alerts-container">
+      <div className="back-arrow" onClick={() => navigate("/")}>←</div>
+      <div style={{ textAlign: 'center', padding: '20px', color: 'red' }}>
+        <p>Error: {error}</p>
+        <button
+          onClick={handleRefresh}
+          style={{
+            marginTop: '10px',
+            padding: '10px 15px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          🔄 Refresh
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="alerts-container">
@@ -152,7 +215,24 @@ function Alerts() {
         </div>
       )}
 
-      <h2 className="bookings-title">Bookings</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h2 className="bookings-title" style={{ margin: 0 }}>Bookings</h2>
+        <button
+          onClick={handleRefresh}
+          disabled={loading}
+          style={{
+            padding: '10px 15px',
+            backgroundColor: '#007bff',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading ? 0.6 : 1,
+          }}
+        >
+          {loading ? 'Loading...' : '🔄 Refresh'}
+        </button>
+      </div>
       {bookings.length === 0 ? (
         <p>No bookings available.</p>
       ) : (

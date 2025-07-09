@@ -1,9 +1,9 @@
 .datasheetcss{
     background: linear-gradient(to right, #e3f2fd, #bbdefb);
-    padding-bottom: 100px;
+    padding-bottom: 120px;
 }
 
 /* Ensure the last card is always fully visible above the BottomNavbar */
 .datasheetcss > div > div:last-child {
-    margin-bottom: 24px;
+    margin-bottom: 40px;
 }
